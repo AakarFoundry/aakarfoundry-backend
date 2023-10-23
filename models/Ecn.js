@@ -2,36 +2,36 @@ const mongoose = require('mongoose')
 const Schema = mongoose.Schema;
 
 
-const CustomerSchema = new Schema({
-    customerName: {
+const EcnSchema = new Schema({
+    enquiryNo: {
         type: String,
         required: true
     },
-    customerReference: {
+    ecnNo: {
         type: String,
         required: true
     },
-    contact: {
+    partName: {
         type: String,
         required: true
     },
-    delivery: {
+    number: {
         type: String,
         required: true
     },
-    enquiry: {
+    weight: {
         type: String,
         required: true
     },
-    path: {
+    projectName: {
         type: String,
         required: true
     },
-    category: {
+    ecnType: {
         type: String,
         required: true
     },
 })
 
-const Customer = mongoose.model("Customer", CustomerSchema);
-module.exports = Customer;
+const Ecn = mongoose.model("Ecn", EcnSchema);
+module.exports = Ecn;
