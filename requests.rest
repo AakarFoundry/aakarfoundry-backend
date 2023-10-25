@@ -1,0 +1,15 @@
+GET http://localhost:3001/customers
+
+###
+POST http://localhost:3001/customer/new
+Content-Type: application/json
+
+{
+    "customerName" : "Philips",
+    "customerReference": "1234",
+    "contact": "9970803618",
+    "delivery": "Pune",
+    "enquiry": "RFQ-91",
+    "path": "C:/Users/Philips",
+    "category": "rfq"
+}
