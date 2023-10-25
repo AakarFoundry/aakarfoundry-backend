@@ -98,7 +98,7 @@ Content-Type: application/json
         "machined": "req.body.machined",
         "blasting": "req.body.blasting",
         "productQc": "req.body.productQc",
-        remarks: "req.body.remarks"
+        "remarks": "req.body.remarks"
 }
 
 
