@@ -1,12 +1,13 @@
 const express = require('express');
 const mongoose = require('mongoose');
+require('dotenv').config();
 // const apiRouter = require('./routes/');
 const cors = require('cors');
 const app = express();
 app.use(express.json());
 app.use(cors());
 
-mongoose.connect('mongodb://127.0.0.1:27017/aakarfoundryapi', {
+mongoose.connect(process.env.MY_MONGO_URL, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
 })
@@ -28,7 +29,6 @@ app.get('/customers', async (req,res) => {
     const customers = await Customer.find();
 
     res.json(customers);
-    res.send(customers);
 });
 
 app.post('/customer/new', (req,res) => {
@@ -44,4 +44,4 @@ app.post('/customer/new', (req,res) => {
     customer.save();
     res.json(customer);
 });
-app.listen(3001, () => console.log("Server started on port 3001"));
+app.listen(3001, () => console.log('Connected to port'));
