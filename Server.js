@@ -25,6 +25,28 @@ const NPD = require('./models/NPD');
 const Register = require('./models/Register');
 const Rfq = require('./models/Rfq');
 const Risk = require('./models/Risk');
+
+
+app.get('/registers', async (req,res) => {
+    const registers = await Register.find();
+
+    res.json(registers);
+});
+
+
+app.post('/register/new', (req,res)=>{
+    const register = new Register({
+        name:req.body.name,
+        email:req.body.email,
+        number:req.body.number,
+        department:req.body.department ,
+        priority: req.body.priority,
+
+    });
+    register.save();
+    res.json(register);
+});
+
 app.get('/customers', async (req,res) => {
     const customers = await Customer.find();
 

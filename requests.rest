@@ -1,15 +1,13 @@
-GET https://aakarfoundry-backend.onrender.com/customers
+GET https://aakarfoundry-backend.onrender.com/registers
 
 ###
-POST https://aakarfoundry-backend.onrender.com/customer/new
+POST https://aakarfoundry-backend.onrender.com/register/new
 Content-Type: application/json
 
 {
-    "customerName" : "Philips",
-    "customerReference": "1234",
-    "contact": "9970803618",
-    "delivery": "Pune",
-    "enquiry": "RFQ-91",
-    "path": "C:/Users/Philips",
-    "category": "rfq"
+        "name":"Vinayak Joshi",
+        "email":"vinyak.joshi@aakarfoundry.com",
+        "number":"9867543201",
+        "department":"Marketing",
+        "priority": "HOD",
 }
