@@ -61,4 +61,4 @@ const DesignSchema = new Schema({
 })
 
 const Design = mongoose.model("Design", DesignSchema);
-module.exports(Design);
+module.exports= Design;
