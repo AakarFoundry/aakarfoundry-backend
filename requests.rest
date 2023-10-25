@@ -9,5 +9,5 @@ Content-Type: application/json
         "email":"vinyak.joshi@aakarfoundry.com",
         "number":"9867543201",
         "department":"Marketing",
-        "priority": "HOD",
+        "priority": "HOD"
 }

@@ -18,6 +18,10 @@ const NPDSchema = new Schema({
         type:String,
         required: true,
     },
+    remarks:{
+        type:String,
+        required: true,
+    },
    
 });
 
