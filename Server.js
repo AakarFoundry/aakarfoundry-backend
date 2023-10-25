@@ -28,6 +28,7 @@ app.get('/customers', async (req,res) => {
     const customers = await Customer.find();
 
     res.json(customers);
+    res.send(customers);
 });
 
 app.post('/customer/new', (req,res) => {
