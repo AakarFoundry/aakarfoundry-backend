@@ -18,13 +18,13 @@ mongoose.connect(process.env.MY_MONGO_URL, {
 
 
 const Customer = require('./models/Customer');
-// const Design = require('./models/Design');
-// const Ecn = require('./models/Ecn');
-// const Login = require('./models/Login');
-// const NPD = require('./models/NPD');
-// const Register = require('./models/Register');
-// const Rfq = require('./models/Rfq');
-// const Risk = require('./models/Risk');
+const Design = require('./models/Design');
+const Ecn = require('./models/Ecn');
+const Login = require('./models/Login');
+const NPD = require('./models/NPD');
+const Register = require('./models/Register');
+const Rfq = require('./models/Rfq');
+const Risk = require('./models/Risk');
 app.get('/customers', async (req,res) => {
     const customers = await Customer.find();
 
