@@ -1,7 +1,7 @@
-GET http://localhost:3001/customers
+GET https://aakarfoundry-backend.onrender.com/customers
 
 ###
-POST http://localhost:3001/customer/new
+POST https://aakarfoundry-backend.onrender.com/customer/new
 Content-Type: application/json
 
 {
