@@ -1,13 +1,22 @@
-GET https://aakarfoundry-backend.onrender.com/registers
+GET https://aakarfoundry-backend.onrender.com/designs
 
 ###
-POST https://aakarfoundry-backend.onrender.com/register/new
+POST https://aakarfoundry-backend.onrender.com/design/new
 Content-Type: application/json
 
 {
-        "name":"Vinayak Joshi",
-        "email":"vinyak.joshi@aakarfoundry.com",
-        "number":"9867543201",
-        "department":"Marketing",
-        "priority": "HOD"
+    "weight":"10",
+    "casting": "abc",
+    "area": "10",
+    "dieCasting":"yes",
+    "impressions": "abc",
+    "rawMaterial": "abc",
+    "dieCost": "aa",
+    "coreCost": "aa",
+    "dieLife": "aa",
+    "diePeriod": "aa",
+    "shots": "aa",
+    "cores": "aa",
+    "sandWeight":"aa",
+    "remarks": "aa"
 }

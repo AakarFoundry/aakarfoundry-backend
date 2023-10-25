@@ -15,8 +15,6 @@ mongoose.connect(process.env.MY_MONGO_URL, {
     .catch(console.error);
 
 // app.use("/api", apiRouter);
-
-
 const Customer = require('./models/Customer');
 const Design = require('./models/Design');
 const Ecn = require('./models/Ecn');
@@ -29,7 +27,6 @@ const Risk = require('./models/Risk');
 
 app.get('/registers', async (req, res) => {
     const registers = await Register.find();
-
     res.json(registers);
 });
 
@@ -49,7 +46,6 @@ app.post('/register/new', (req, res) => {
 
 app.get('/customers', async (req, res) => {
     const customers = await Customer.find();
-
     res.json(customers);
 });
 
@@ -72,7 +68,7 @@ app.get('/rfqs', async (req, res) => {
     res.json(rfqs);
 });
 
-app.post('rfq/new', (req, res) => {
+app.post('/rfq/new', (req, res) => {
     const rfq = new Rfq({
         name: req.body.name,
         partMach: req.body.partMach,
@@ -109,7 +105,7 @@ app.get('/ecns', async (req, res) => {
     res.json(ecns);
 });
 
-app.post('ecn/new', (req, res) => {
+app.post('/ecn/new', (req, res) => {
     const ecn = new Ecn({
         name: req.body.name,
         partMach: req.body.partMach,
@@ -134,9 +130,9 @@ app.get('/designs', async (req, res) => {
     res.json(designs);
 });
 
-app.post('design/new', (req, res) => {
+app.post('/design/new', (req, res) => {
     const design = new Design({
-        weight:  req.body.weigth,
+        weight:  req.body.weight,
         casting:  req.body.casting,
         area:  req.body.area,
         dieCasting:  req.body.dieCasting,
@@ -149,8 +145,8 @@ app.post('design/new', (req, res) => {
         shots:  req.body.shots,
         cores:  req.body.cores,
         sandWeight:  req.body.sandWeight,
-        remarks: req.body.remarks
-    })
+        remarks: req.body.remarks,
+    });
     design.save();
     res.json(design);
 });
@@ -161,7 +157,7 @@ app.get('/npds', async (req, res) => {
     res.json(npds);
 });
 
-app.post('npd/new', (req, res) => {
+app.post('/npd/new', (req, res) => {
     const npd = new NPD({
         investment :req.body.investment,
         partFeasible :req.body.partFeasible,

@@ -31,6 +31,10 @@ const EcnSchema = new Schema({
         type: String,
         required: true
     },
+    remarks:{
+        type: String,
+        required:true
+    },
 })
 
 const Ecn = mongoose.model("Ecn", EcnSchema);
