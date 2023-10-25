@@ -1,3 +1,22 @@
+GET https://aakarfoundry-backend.onrender.com/customers
+
+
+###
+POST https://aakarfoundry-backend.onrender.com/customer/new
+Content-Type: application/json
+
+{
+        "customerName":"Philips",
+        "customerReference":"1234",
+        "contact":"9970803618",
+        "delivery":"Pune",
+        "enquiry":"RFQ-91",
+        "path":"C:/Users/Philips",
+        "category":"rfq"
+}
+
+
+###
 GET https://aakarfoundry-backend.onrender.com/designs
 
 ###
@@ -19,4 +38,124 @@ Content-Type: application/json
     "cores": "aa",
     "sandWeight":"aa",
     "remarks": "aa"
+}
+
+
+###
+GET https://aakarfoundry-backend.onrender.com/rfqs
+
+
+###
+POST https://aakarfoundry-backend.onrender.com/rfq/new
+Content-Type: application/json
+
+{
+        "partMach": "req.body.partMach",
+        "partCast": "req.body.partCast",
+        "details": "req.body.details",
+        "enquiry": "req.body.enquiry",
+        "quantity": "req.body.quantity",
+        "life": "req.body.life",
+        "processRequired": "req.body.processRequired",
+        "alloy": "req.body.alloy",
+        "machined": "req.body.machined",
+        "blasting": "req.body.blasting",
+        "productQc": "req.body.productQc",
+        "anodizing": "req.body.anodizing",
+        "coating": "req.body.coating",
+        "materials": "req.body.materials",
+        "pressure": "req.body.pressure",
+        "impregnation": "req.body.impregnation",
+        "treatment": "req.body.treatment",
+        "packaging": "req.body.packaging",
+        "delivery": "req.body.delivery",
+        "works": "req.body.works",
+        "tonnage": "req.body.tonnage",
+        "sampleDate": "req.body.sampleDate",
+        "pswDate": "req.body.pswDate",
+        "remarks": "req.body.remarks"
+}
+
+
+### 
+GET https://aakarfoundry-backend.onrender.com/ecns
+
+
+###
+POST https://aakarfoundry-backend.onrender.com/ecn/new
+Content-Type: application/json
+
+{
+        "name": "req.body.name",
+        "partMach": "req.body.partMach",
+        "partCast": "req.body.partCast",
+        "details": "req.body.details",
+        "enquiry": "req.body.enquiry",
+        "quantity": "req.body.quantity",
+        "life": "req.body.life",
+        "processRequired": "req.body.processRequired",
+        "alloy": "req.body.alloy",
+        "machined": "req.body.machined",
+        "blasting": "req.body.blasting",
+        "productQc": "req.body.productQc",
+        remarks: "req.body.remarks"
+}
+
+
+###
+GET https://aakarfoundry-backend.onrender.com/designs
+
+
+###
+POST https://aakarfoundry-backend.onrender.com/design/new 
+Content-Type: application/json
+
+{
+        "weight":  "req.body.weight",
+        "casting":  "req.body.casting",
+        "area":  "req.body.area",
+        "dieCasting":  "req.body.dieCasting",
+        "impressions":  "req.body.impressions",
+        "rawMaterial":  "req.body.rawMaterial",
+        "dieCost":  "req.body.dieCost",
+        "coreCost":  "req.body.coreCost",
+        "dieLife":  "req.body.dieLife",
+        "diePeriod":  "req.body.diePeriod",
+        "shots":  "req.body.shots",
+        "cores":  "req.body.cores",
+        "sandWeight":  "req.body.sandWeight",
+        "remarks": "req.body.remarks",
+}
+
+
+###
+GET https://aakarfoundry-backend.onrender.com/npds
+
+
+###
+POST https://aakarfoundry-backend.onrender.com/npd/new 
+Content-Type: application/json
+
+{
+        "investment" :"req.body.investment",
+        "partFeasible" :"req.body.partFeasible",
+        "changes" :"req.body.changes",
+        "development" :"req.body.development"
+}
+
+
+###
+GET https://aakarfoundry-backend.onrender.com/risks
+
+
+###
+POST https://aakarfoundry-backend.onrender.com/risk/new 
+Content-Type: application/json 
+
+{
+        "risk" :"req.body.risk",
+        "requirement" :"req.body.requirement",
+        "application" :"req.body.application",
+        "estimation" :"req.body.estimation",
+        "remarks" :"req.body.remarks",
 }

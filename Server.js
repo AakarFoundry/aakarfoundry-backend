@@ -24,6 +24,25 @@ const Register = require('./models/Register');
 const Rfq = require('./models/Rfq');
 const Risk = require('./models/Risk');
 
+app.get('/customers', async (req, res) => {
+    const customers = await Customer.find();
+    res.json(customers);
+});
+
+app.post('/customer/new', (req, res) => {
+    const customer = new Customer({
+        customerName: req.body.customerName,
+        customerReference: req.body.customerReference,
+        contact: req.body.contact,
+        delivery: req.body.delivery,
+        enquiry: req.body.enquiry,
+        path: req.body.path,
+        category: req.body.category
+    })
+    customer.save();
+    res.json(customer);
+});
+
 
 app.get('/registers', async (req, res) => {
     const registers = await Register.find();
@@ -44,24 +63,6 @@ app.post('/register/new', (req, res) => {
     res.json(register);
 });
 
-app.get('/customers', async (req, res) => {
-    const customers = await Customer.find();
-    res.json(customers);
-});
-
-app.post('/customer/new', (req, res) => {
-    const customer = new Customer({
-        customerName: req.body.customerName,
-        customerReference: req.body.customerReference,
-        contact: req.body.contact,
-        delivery: req.body.delivery,
-        enquiry: req.body.enquiry,
-        path: req.body.path,
-        category: req.body.category
-    })
-    customer.save();
-    res.json(customer);
-});
 
 app.get('/rfqs', async (req, res) => {
     const rfqs = await Rfq.find();
