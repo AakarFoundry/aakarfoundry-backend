@@ -4,6 +4,9 @@ require('dotenv').config();
 // const apiRouter = require('./routes/');
 const cors = require('cors');
 const app = express();
+app.use(
+    express.urlencoded({ extended: true })
+);
 app.use(express.json());
 app.use(cors());
 
@@ -108,18 +111,13 @@ app.get('/ecns', async (req, res) => {
 
 app.post('/ecn/new', (req, res) => {
     const ecn = new Ecn({
-        name: req.body.name,
-        partMach: req.body.partMach,
-        partCast: req.body.partCast,
-        details: req.body.details,
-        enquiry: req.body.enquiry,
-        quantity: req.body.quantity,
-        life: req.body.life,
-        processRequired: req.body.processRequired,
-        alloy: req.body.alloy,
-        machined: req.body.machined,
-        blasting: req.body.blasting,
-        productQc: req.body.productQc,
+        enquiryNo: req.body.enquiryNo,
+        ecnNo: req.body.ecnNo,
+        partName: req.body.partName,
+        number: req.body.number,
+        weight: req.body.weight,
+        projectName: req.body.projectName,
+        ecnType: req.body.ecnType,
         remarks: req.body.remarks
     })
     ecn.save();
@@ -163,7 +161,8 @@ app.post('/npd/new', (req, res) => {
         investment :req.body.investment,
         partFeasible :req.body.partFeasible,
         changes :req.body.changes,
-        development :req.body.development
+        development :req.body.development,
+        remarks :req.body.remarks,
     })
     npd.save();
     res.json(npd);
@@ -175,7 +174,7 @@ app.get('/risks', async (req, res) => {
     res.json(risks);
 });
 
-app.post('/risks/new',(req,res)=>{
+app.post('/risk/new',(req,res)=>{
     const risk=new Risk({
         risk :req.body.risk,
         requirement :req.body.requirement,
