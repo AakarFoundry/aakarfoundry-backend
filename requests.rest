@@ -7,7 +7,7 @@ Content-Type: application/json
 
 {
         "customerName":"Philips",
-        "customerReference":"1234",
+        "customerReference":"123789",
         "contact":"9970803618",
         "delivery":"Pune",
         "enquiry":"RFQ-91",
@@ -98,7 +98,7 @@ Content-Type: application/json
         "machined": "req.body.machined",
         "blasting": "req.body.blasting",
         "productQc": "req.body.productQc",
-        remarks: "req.body.remarks"
+        "remarks": "req.body.remarks"
 }
 
 
