@@ -16,30 +16,6 @@ Content-Type: application/json
 }
 
 
-###
-GET https://aakarfoundry-backend.onrender.com/designs
-
-###
-POST https://aakarfoundry-backend.onrender.com/design/new
-Content-Type: application/json
-
-{
-    "weight":"10",
-    "casting": "abc",
-    "area": "10",
-    "dieCasting":"yes",
-    "impressions": "abc",
-    "rawMaterial": "abc",
-    "dieCost": "aa",
-    "coreCost": "aa",
-    "dieLife": "aa",
-    "diePeriod": "aa",
-    "shots": "aa",
-    "cores": "aa",
-    "sandWeight":"aa",
-    "remarks": "aa"
-}
-
 
 ###
 GET https://aakarfoundry-backend.onrender.com/rfqs
@@ -50,6 +26,7 @@ POST https://aakarfoundry-backend.onrender.com/rfq/new
 Content-Type: application/json
 
 {
+        "name": "req.body.name",
         "partMach": "req.body.partMach",
         "partCast": "req.body.partCast",
         "details": "req.body.details",
@@ -86,18 +63,13 @@ POST https://aakarfoundry-backend.onrender.com/ecn/new
 Content-Type: application/json
 
 {
-        "name": "req.body.name",
-        "partMach": "req.body.partMach",
-        "partCast": "req.body.partCast",
-        "details": "req.body.details",
-        "enquiry": "req.body.enquiry",
-        "quantity": "req.body.quantity",
-        "life": "req.body.life",
-        "processRequired": "req.body.processRequired",
-        "alloy": "req.body.alloy",
-        "machined": "req.body.machined",
-        "blasting": "req.body.blasting",
-        "productQc": "req.body.productQc",
+        "enquiryNo": "req.body.partMach",
+        "ecnNo": "req.body.partCast",
+        "partName": "req.body.details",
+        "number": "req.body.enquiry",
+        "weight": "req.body.quantity",
+        "projectName": "req.body.life",
+        "ecnType": "req.body.processRequired",
         "remarks": "req.body.remarks"
 }
 
@@ -124,7 +96,7 @@ Content-Type: application/json
         "shots":  "req.body.shots",
         "cores":  "req.body.cores",
         "sandWeight":  "req.body.sandWeight",
-        "remarks": "req.body.remarks",
+        "remarks": "req.body.remarks"
 }
 
 
@@ -140,7 +112,8 @@ Content-Type: application/json
         "investment" :"req.body.investment",
         "partFeasible" :"req.body.partFeasible",
         "changes" :"req.body.changes",
-        "development" :"req.body.development"
+        "development" :"req.body.development",
+        "remarks": "req.body.remarks"
 }
 
 
@@ -157,5 +130,5 @@ Content-Type: application/json
         "requirement" :"req.body.requirement",
         "application" :"req.body.application",
         "estimation" :"req.body.estimation",
-        "remarks" :"req.body.remarks",
+        "remarks" :"req.body.remarks"
 }
