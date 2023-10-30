@@ -7,7 +7,7 @@ app.use(
     express.urlencoded({ extended: true })
 );
 app.use(express.json());
-app.use(cors());
+app.use(cors({ credentials: true, origin: 'http://localhost:5173' }));
 
 mongoose.connect(process.env.MY_MONGO_URL, {
     useNewUrlParser: true,
@@ -33,7 +33,7 @@ function handleError(res, error) {
 
 app.get('/customers', async (req, res) => {
     try {
-        const customers = await Customer.find();
+        const customers = await Customer.findOne();
         res.json(customers);
     } catch (error) {
         handleError(res, error);
@@ -50,6 +50,7 @@ app.post('/customer/new', (req, res) => {
             handleError(res, error);
         });
 });
+
 
 app.get('/registers', async (req, res) => {
     try {
@@ -171,4 +172,4 @@ app.post('/risk/new', (req, res) => {
         });
 });
 
-app.listen(3001, () => console.log('Connected to port'));
+app.listen(4000, () => console.log('Connected to port'));
