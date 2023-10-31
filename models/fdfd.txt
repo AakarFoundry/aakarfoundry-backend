@@ -1,8 +1,4 @@
-const mongoose = require('mongoose')
-const Schema = mongoose.Schema;
-
-const RfqSchema = new Schema({
-    name: {
+name: {
         type: String,
         required: true
     },
@@ -13,14 +9,6 @@ const RfqSchema = new Schema({
     partCast: {
         type: String,
         required: true
-    },
-    finishWeight: {
-        type: String,
-        required: true
-    },
-    castingWeight: {
-        type: String,
-        required: true,
     },
     details: {
         type: String,
@@ -102,7 +90,3 @@ const RfqSchema = new Schema({
         type: String,
         required: true
     },
-})
-
-const Rfq = mongoose.model("Rfq", RfqSchema);
-module.exports = Rfq;

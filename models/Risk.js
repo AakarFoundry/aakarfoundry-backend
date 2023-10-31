@@ -10,12 +10,60 @@ const RiskSchema = new Schema({
         type:String,
         required: true,
     },
-    application :{
+    application: {
+        type:String,
+        required:true,
+    },
+    internal: {
         type:String,
         required: true,
     },
-    estimation :{
+    environment: {
         type:String,
+        required: true,
+    },    
+    environment_remarks: {
+        type:String,
+        required: true,
+    },
+    investment: {
+        type:String,
+        required: true,
+    },    
+    investment_remarks: {
+        type:String,
+        required: true,
+    },
+    manufacturing: {
+        type:String,
+        required: true,
+    },    
+    manufacturing_remarks: {
+        type:String,
+        required: true,
+    },
+    technical: {
+        type:String,
+        required: true,
+    },    
+    technical_remarks: {
+        type:String,
+        required: true,
+    },
+    estimation: {
+        type:String,
+        required: true,
+    },    
+    estimation_remarks: {
+        type:String,
+        required: true,
+    },
+    regret: {
+        type: String,
+        required: true,
+    },
+    regret_remarks:{
+        type: String,
         required: true,
     },
     remarks :{

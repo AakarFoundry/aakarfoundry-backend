@@ -1,33 +1,37 @@
-const mongoose = require('mongoose')
+const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
+const QualitySchema = new Schema({
+    gaugesCost: {
+        type: String,
+        required: true
+    },
+    leakCost: {
+        type: String,
+        required: true
+    },
+    washingCost: {
+        type: String,
+        required: true
+    },
+    capCost: {
+        type: String,
+        required: true
+    },
+    packagingType: {
+        type: String,
+        required: true
+    },
+    packagingCost: {
+        type: String,
+        required: true
+    },
+    remarks: {
+        type: String,
+        required: true
+    }
 
-const EcnSchema = new Schema({
-    ecnNo: {
-        type: String,
-        required: true
-    },
-    partName: {
-        type: String,
-        required: true
-    },
-    number: {
-        type: String,
-        required: true
-    },
-    weight: {
-        type: String,
-        required: true
-    },
-    projectName: {
-        type: String,
-        required: true
-    },
-    ecnType: {
-        type: String,
-        required: true
-    },
 })
 
-const Ecn = mongoose.model("Ecn", EcnSchema);
-module.exports = Ecn;
+const Quality = mongoose.model("Quality", QualitySchema);
+module.exports= Quality;

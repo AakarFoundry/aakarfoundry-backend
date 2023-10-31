@@ -15,8 +15,8 @@ mongoose.connect(process.env.MY_MONGO_URL, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
 })
-.then(() => console.log("Connected to DB"))
-.catch(error => console.error("Database connection error:", error));
+    .then(() => console.log("Connected to DB"))
+    .catch(error => console.error("Database connection error:", error));
 
 const Customer = require('./models/Customer');
 const Design = require('./models/Design');
@@ -26,13 +26,14 @@ const NPD = require('./models/NPD');
 const Register = require('./models/Register');
 const Rfq = require('./models/Rfq');
 const Risk = require('./models/Risk');
-
+const Machine = require('./models/Machine');
+const Quality = require('./models/Quality');
 // Error handling middleware function
 function handleError(res, error) {
     console.error(error);
     res.status(500).json({ message: 'Internal Server Error', error: error.message });
 }
- 
+
 
 // Login route
 app.post('/login', async (req, res) => {
@@ -54,26 +55,7 @@ app.post('/login', async (req, res) => {
 });
 
 
-app.post('/register/new', async (req, res) => {
-    const { name, email, number, department, password, priority } = req.body;
-    const passwordToUse = password || 'aakarfoundry';
-    const register = new Register({
-        name,
-        email,
-        number,
-        department,
-        password: passwordToUse,
-        priority
-    });
 
-    register.save()
-        .then(result => {
-            res.json(result);
-        })
-        .catch(error => {
-            handleError(res, error);
-        });
-});
 
 
 app.get('/customers', async (req, res) => {
@@ -89,14 +71,32 @@ app.post('/customer/new', (req, res) => {
     const customer = new Customer(req.body);
     customer.save()
         .then(result => {
-            res.json(result);
+            res.json(result._id);
         })
         .catch(error => {
             handleError(res, error);
         });
 });
-
-
+app.post('/machine/new', (req, res) => {
+    const machine = new Machine(req.body);
+    machine.save()
+        .then(result => {
+            res.json(result._id);
+        })
+        .catch(error => {
+            handleError(res, error);
+        });
+});
+app.post('/quality/new', (req, res) => {
+    const quality = new Quality(req.body);
+    quality.save()
+        .then(result => {
+            res.json(result._id);
+        })
+        .catch(error => {
+            handleError(res, error);
+        });
+});
 app.get('/registers', async (req, res) => {
     try {
         const registers = await Register.find();
@@ -106,8 +106,18 @@ app.get('/registers', async (req, res) => {
     }
 });
 
-app.post('/register/new', (req, res) => {
-    const register = new Register(req.body);
+app.post('/register/new', async (req, res) => {
+    const { name, email, number, department, password, priority } = req.body;
+    const passwordToUse = password || 'aakarfoundry';
+    const register = new Register({
+        name,
+        email,
+        number,
+        department,
+        password: passwordToUse,
+        priority
+    });
+
     register.save()
         .then(result => {
             res.json(result);
