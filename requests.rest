@@ -132,3 +132,16 @@ Content-Type: application/json
         "estimation" :"req.body.estimation",
         "remarks" :"req.body.remarks"
 }
+
+###
+POST http://localhost:4000/register/new 
+Content-Type: application/json 
+
+{
+        "name" :"Abhijeet",
+        "email" :"abhijeetmande@aakarfoundry.com",
+        "number" :"123456789",
+        "department" :"Marketing",
+        "priority" :"HOD"
+        
+}

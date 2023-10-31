@@ -31,6 +31,28 @@ function handleError(res, error) {
     res.status(500).json({ message: 'Internal Server Error', error: error.message });
 }
 
+app.post('/register/new', async (req, res) => {
+    const { name, email, number, department, password, priority } = req.body;
+    const passwordToUse = password || 'aakarfoundry';
+    const register = new Register({
+        name,
+        email,
+        number,
+        department,
+        password: passwordToUse,
+        priority
+    });
+
+    register.save()
+        .then(result => {
+            res.json(result);
+        })
+        .catch(error => {
+            handleError(res, error);
+        });
+});
+
+
 app.get('/customers', async (req, res) => {
     try {
         const customers = await Customer.findOne();
