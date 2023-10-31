@@ -1,4 +1,6 @@
 const express = require('express');
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 const mongoose = require('mongoose');
 require('dotenv').config();
 const cors = require('cors');
@@ -30,6 +32,27 @@ function handleError(res, error) {
     console.error(error);
     res.status(500).json({ message: 'Internal Server Error', error: error.message });
 }
+ 
+
+// Login route
+app.post('/login', async (req, res) => {
+    const { email, password } = req.body;
+    try {
+        const user = await Register.findOne({ email });
+        if (!user) {
+            return res.status(401).json({ message: 'Authentication failed. User not found.' });
+        }
+        const passwordMatch = await bcrypt.compare(password, user.password);
+        if (!passwordMatch) {
+            return res.status(401).json({ message: 'Authentication failed. Password does not match.' });
+        }
+        const token = jwt.sign({ userId: user._id, email: user.email }, 'your-secret-key', { expiresIn: '1h' });
+        res.status(200).json({ message: 'Authentication successful', token });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
 
 app.post('/register/new', async (req, res) => {
     const { name, email, number, department, password, priority } = req.body;

@@ -145,3 +145,11 @@ Content-Type: application/json
         "priority" :"HOD"
         
 }
+
+###
+POST http://localhost:4000/login 
+Content-Type: application/json 
+{
+        "email" :"abhijeetmande@aakarfoundry.com",
+        "password" :"aakarfoundry"      
+}
