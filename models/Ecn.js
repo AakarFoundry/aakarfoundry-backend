@@ -3,7 +3,7 @@ const Schema = mongoose.Schema;
 
 
 const EcnSchema = new Schema({
-    ecnNo: {
+    enquiry: {
         type: String,
         required: true
     },

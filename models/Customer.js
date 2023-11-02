@@ -19,7 +19,7 @@ const CustomerSchema = new Schema({
         type: String,
         required: true
     },
-    enquiry: {
+    enquiryDate: {
         type: String,
         required: true
     },
@@ -31,6 +31,10 @@ const CustomerSchema = new Schema({
         type: String,
         required: true
     },
+    enquiry: {
+        type:String,
+        required: true
+    }
 })
 
 const Customer = mongoose.model("Customer", CustomerSchema);

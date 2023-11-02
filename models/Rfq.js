@@ -78,6 +78,10 @@ const RfqSchema = new Schema({
         type: String,
         required: true
     },
+    custom: {
+        type: String,
+        required: true
+    },
     delivery: {
         type: String,
         required: true

@@ -2,6 +2,10 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const QualitySchema = new Schema({
+    enquiry: {
+        type: String,
+        required: true
+    },
     gaugesCost: {
         type: String,
         required: true

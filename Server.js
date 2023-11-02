@@ -10,14 +10,12 @@ app.use(
 );
 app.use(express.json());
 app.use(cors({ credentials: true, origin: 'http://localhost:5173' }));
-
 mongoose.connect(process.env.MY_MONGO_URL, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
 })
     .then(() => console.log("Connected to DB"))
     .catch(error => console.error("Database connection error:", error));
-
 const Customer = require('./models/Customer');
 const Design = require('./models/Design');
 const Ecn = require('./models/Ecn');
@@ -33,8 +31,6 @@ function handleError(res, error) {
     console.error(error);
     res.status(500).json({ message: 'Internal Server Error', error: error.message });
 }
-
-
 // Login route
 app.post('/login', async (req, res) => {
     const { email, password } = req.body;
@@ -53,11 +49,14 @@ app.post('/login', async (req, res) => {
         res.status(500).json({ error: error.message });
     }
 });
-
-
-
-
-
+app.get('/dashboard', async (req, res) => {
+    try {
+        const dash = await Customer.find({}, 'customerName contact enquiry');
+        res.json(dash);
+    } catch (error) {
+        res.status(500).json({error: error.message});
+    }
+});
 app.get('/customers', async (req, res) => {
     try {
         const customers = await Customer.findOne();
@@ -67,16 +66,31 @@ app.get('/customers', async (req, res) => {
     }
 });
 
-app.post('/customer/new', (req, res) => {
-    const customer = new Customer(req.body);
-    customer.save()
-        .then(result => {
-            res.json(result._id);
-        })
-        .catch(error => {
-            handleError(res, error);
-        });
+app.post('/customer/new', async (req, res) => {
+    try {
+        let enquiryNo;
+        if (req.body.category === "RFQ") {
+            const temp = await Rfq.countDocuments() + 3001;
+            enquiryNo = 'RFQ - ' + temp; 
+        } else {
+            const temp = await Ecn.countDocuments() + 3001;
+            enquiryNo = 'ECN - ' + temp;
+        }
+
+        const customerData = req.body;
+        customerData.enquiry = enquiryNo;
+
+        const customer = new Customer(customerData);
+        const savedCustomer = await customer.save();
+        const id = savedCustomer._id;
+
+        res.json({ enquiryNo, id });
+    } catch (error) {
+        handleError(res, error);
+    }
 });
+
+
 app.post('/machine/new', (req, res) => {
     const machine = new Machine(req.body);
     machine.save()
@@ -87,6 +101,7 @@ app.post('/machine/new', (req, res) => {
             handleError(res, error);
         });
 });
+
 app.post('/quality/new', (req, res) => {
     const quality = new Quality(req.body);
     quality.save()
@@ -97,6 +112,7 @@ app.post('/quality/new', (req, res) => {
             handleError(res, error);
         });
 });
+
 app.get('/registers', async (req, res) => {
     try {
         const registers = await Register.find();
