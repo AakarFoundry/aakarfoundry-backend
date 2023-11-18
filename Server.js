@@ -32,7 +32,6 @@ function handleError(res, error) {
     console.error(error);
     res.status(500).json({ message: 'Internal Server Error', error: error.message });
 }
- 
 
 // Login route
 app.post('/login', async (req, res) => {
@@ -47,15 +46,23 @@ app.post('/login', async (req, res) => {
             return res.status(401).json({ message: 'Authentication failed. Password does not match.' });
         }
         const token = jwt.sign({ userId: user._id, email: user.email }, 'your-secret-key', { expiresIn: '1h' });
+        // Send the response with the token
         res.status(200).json({ message: 'Authentication successful', token });
     } catch (error) {
-        res.status(500).json({ error: error.message });
+        console.error('Authentication error:', error);
+
+        // Send a generic error response
+        res.status(500).json({ message: 'Authentication failed. Please try again.' });
     }
 });
 
 
+
+
+
+
 app.post('/register/new', async (req, res) => {
-    const { name, email, number, department, password, priority } = req.body;
+    const { name, email, number, department, password, role } = req.body;
     const passwordToUse = password || 'aakarfoundry';
     const register = new Register({
         name,
@@ -63,7 +70,7 @@ app.post('/register/new', async (req, res) => {
         number,
         department,
         password: passwordToUse,
-        priority
+        role
     });
 
     register.save()

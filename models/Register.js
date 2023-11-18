@@ -23,7 +23,7 @@ const RegisterSchema = new Schema({
         type: String,
         default:"aakarfoundry"
     },
-    priority: {
+    role: {
         type: String,
         required: true
     },
