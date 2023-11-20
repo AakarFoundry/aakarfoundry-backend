@@ -152,6 +152,6 @@ POST http://localhost:4000/login
 Content-Type: application/json 
 
 {
-        "email" :"abhijeet@aakarfoundry.com",
-        "password" :"aakar"   
+        "email" :"",
+        "password" :""   
 }
