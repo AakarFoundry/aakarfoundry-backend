@@ -2,6 +2,10 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const DesignSchema = new Schema({
+    enquiry: {
+        type: String,
+        required: true
+    },
     weight: {
         type: String,
         required: true
@@ -61,4 +65,4 @@ const DesignSchema = new Schema({
 })
 
 const Design = mongoose.model("Design", DesignSchema);
-module.exports= Design;
+module.exports = Design;

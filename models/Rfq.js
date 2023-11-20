@@ -1,7 +1,7 @@
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema;
 
-const RfqSchema  = new Schema({
+const RfqSchema = new Schema({
     name: {
         type: String,
         required: true
@@ -13,6 +13,14 @@ const RfqSchema  = new Schema({
     partCast: {
         type: String,
         required: true
+    },
+    finishWeight: {
+        type: String,
+        required: true
+    },
+    castingWeight: {
+        type: String,
+        required: true,
     },
     details: {
         type: String,
@@ -50,14 +58,6 @@ const RfqSchema  = new Schema({
         type: String,
         required: true
     },
-    anodizing: {
-        type: String,
-        required: true
-    },
-    coating: {
-        type: String,
-        required: true
-    },
     materials: {
         type: String,
         required: true
@@ -78,6 +78,10 @@ const RfqSchema  = new Schema({
         type: String,
         required: true
     },
+    custom: {
+        type: String,
+        required: true
+    },
     delivery: {
         type: String,
         required: true
@@ -90,19 +94,18 @@ const RfqSchema  = new Schema({
         type: String,
         required: true
     },
-    sampleDate: {
-        type: String,
+    surfaceTreatment: {
+        type: Array,
         required: true
     },
-    pswDate: {
-        type: String,
+    treatmentSpecification: {
+        type: Array,
         required: true
     },
     remarks: {
         type: String,
         required: true
     },
-
 })
 
 const Rfq = mongoose.model("Rfq", RfqSchema);

@@ -3,11 +3,7 @@ const Schema = mongoose.Schema;
 
 
 const EcnSchema = new Schema({
-    enquiryNo: {
-        type: String,
-        required: true
-    },
-    ecnNo: {
+    enquiry: {
         type: String,
         required: true
     },
@@ -30,10 +26,6 @@ const EcnSchema = new Schema({
     ecnType: {
         type: String,
         required: true
-    },
-    remarks:{
-        type: String,
-        required:true
     },
 })
 

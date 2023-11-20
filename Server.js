@@ -10,14 +10,12 @@ app.use(
 );
 app.use(express.json());
 app.use(cors({ credentials: true, origin: 'http://localhost:5173' }));
-
 mongoose.connect(process.env.MY_MONGO_URL, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
 })
-.then(() => console.log("Connected to DB"))
-.catch(error => console.error("Database connection error:", error));
-
+    .then(() => console.log("Connected to DB"))
+    .catch(error => console.error("Database connection error:", error));
 const Customer = require('./models/Customer');
 const Design = require('./models/Design');
 const Ecn = require('./models/Ecn');
@@ -26,13 +24,13 @@ const NPD = require('./models/NPD');
 const Register = require('./models/Register');
 const Rfq = require('./models/Rfq');
 const Risk = require('./models/Risk');
-
+const Machine = require('./models/Machine');
+const Quality = require('./models/Quality');
 // Error handling middleware function
 function handleError(res, error) {
     console.error(error);
     res.status(500).json({ message: 'Internal Server Error', error: error.message });
 }
-
 // Login route
 app.post('/login', async (req, res) => {
     const { email, password } = req.body;
@@ -46,8 +44,12 @@ app.post('/login', async (req, res) => {
             return res.status(401).json({ message: 'Authentication failed. Password does not match.' });
         }
         const token = jwt.sign({ userId: user._id, email: user.email }, 'your-secret-key', { expiresIn: '1h' });
+        const userEmail = user.email;
+        const userDepartment = user.department;
+        const userRole = user.role;
+        const userName = user.name
         // Send the response with the token
-        res.status(200).json({ message: 'Authentication successful', token });
+        res.status(200).json({ message: 'Authentication successful', token, userEmail,userDepartment,userRole,userName});
     } catch (error) {
         console.error('Authentication error:', error);
 
@@ -56,6 +58,78 @@ app.post('/login', async (req, res) => {
     }
 });
 
+app.get('/dashboard', async (req, res) => {
+    try {
+        const dash = await Customer.find({}, 'customerName contact enquiry');
+        res.json(dash);
+    } catch (error) {
+        res.status(500).json({error: error.message});
+    }
+});
+app.get('/customers', async (req, res) => {
+    try {
+        const customers = await Customer.findOne();
+        res.json(customers);
+    } catch (error) {
+        handleError(res, error);
+    }
+});
+
+app.post('/customer/new', async (req, res) => {
+    try {
+        let enquiryNo;
+        if (req.body.category === "RFQ") {
+            const temp = await Rfq.countDocuments() + 3001;
+            enquiryNo = 'RFQ - ' + temp; 
+        } else {
+            const temp = await Ecn.countDocuments() + 3001;
+            enquiryNo = 'ECN - ' + temp;
+        }
+
+        const customerData = req.body;
+        customerData.enquiry = enquiryNo;
+
+        const customer = new Customer(customerData);
+        const savedCustomer = await customer.save();
+        const id = savedCustomer._id;
+
+        res.json({ enquiryNo, id });
+    } catch (error) {
+        handleError(res, error);
+    }
+});
+
+
+app.post('/machine/new', (req, res) => {
+    const machine = new Machine(req.body);
+    machine.save()
+        .then(result => {
+            res.json(result._id);
+        })
+        .catch(error => {
+            handleError(res, error);
+        });
+});
+
+app.post('/quality/new', (req, res) => {
+    const quality = new Quality(req.body);
+    quality.save()
+        .then(result => {
+            res.json(result._id);
+        })
+        .catch(error => {
+            handleError(res, error);
+        });
+});
+
+app.get('/registers', async (req, res) => {
+    try {
+        const registers = await Register.find();
+        res.json(registers);
+    } catch (error) {
+        handleError(res, error);
+    }
+});
 
 
 
@@ -73,48 +147,6 @@ app.post('/register/new', async (req, res) => {
         role
     });
 
-    register.save()
-        .then(result => {
-            res.json(result);
-        })
-        .catch(error => {
-            handleError(res, error);
-        });
-});
-
-
-app.get('/customers', async (req, res) => {
-    try {
-        const customers = await Customer.findOne();
-        res.json(customers);
-    } catch (error) {
-        handleError(res, error);
-    }
-});
-
-app.post('/customer/new', (req, res) => {
-    const customer = new Customer(req.body);
-    customer.save()
-        .then(result => {
-            res.json(result);
-        })
-        .catch(error => {
-            handleError(res, error);
-        });
-});
-
-
-app.get('/registers', async (req, res) => {
-    try {
-        const registers = await Register.find();
-        res.json(registers);
-    } catch (error) {
-        handleError(res, error);
-    }
-});
-
-app.post('/register/new', (req, res) => {
-    const register = new Register(req.body);
     register.save()
         .then(result => {
             res.json(result);
