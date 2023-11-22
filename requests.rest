@@ -139,8 +139,7 @@ Content-Type: application/json
 
 {
         "name" :"Abhijeet",
-        "email" :"abhijeet@aakarfoundry.com",
-        "email" :"om",
+        "email" :"@aakarfoundry.com",
         "number" :"123456789",
         "department" :"Marketing",
         "role" :"HOD"
@@ -152,6 +151,15 @@ POST http://localhost:4000/login
 Content-Type: application/json 
 
 {
-        "email" :"abhijeet@aakarfoundry.com",
-        "password" :"aakar"   
+        "email" :"@aakarfoundry.com",
+        "password" :"aakarfoundry"   
+}
+###
+POST http://localhost:4000/updatepassword 
+Content-Type: application/json 
+
+{
+        "email" :"@aakarfoundry.com",
+        "oldPassword" :"aakarfoundry" ,
+        "newPassword" :"aakarfoundry"
 }

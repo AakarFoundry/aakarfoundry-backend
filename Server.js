@@ -135,25 +135,33 @@ app.get('/registers', async (req, res) => {
 
 
 
+const saltRounds = 10; // You can adjust the number of rounds as needed
+
 app.post('/register/new', async (req, res) => {
     const { name, email, number, department, password, role } = req.body;
-    const passwordToUse = password || 'aakarfoundry';
-    const register = new Register({
-        name,
-        email,
-        number,
-        department,
-        password: passwordToUse,
-        role
-    });
 
-    register.save()
-        .then(result => {
-            res.json(result);
-        })
-        .catch(error => {
-            handleError(res, error);
+    try {
+        // Hash the password
+        const hashedPassword = await bcrypt.hash(password || 'aakarfoundry', saltRounds);
+
+        // Create a new user with the hashed password
+        const register = new Register({
+            name,
+            email,
+            number,
+            department,
+            password: hashedPassword,
+            role
         });
+
+        // Save the user to the database
+        const result = await register.save();
+        
+        res.json(result);
+    } catch (error) {
+        console.error(error);
+        handleError(res, error);
+    }
 });
 
 app.get('/rfqs', async (req, res) => {
@@ -254,6 +262,28 @@ app.post('/risk/new', (req, res) => {
         .catch(error => {
             handleError(res, error);
         });
+});
+app.post('/updatepassword', async (req, res) => {
+    try {
+        const { email, oldPassword, newPassword } = req.body;
+
+        // Check old password
+        const user = await Register.findOne({ email });
+
+        if (!user || !(await bcrypt.compare(oldPassword, user.password))) {
+            return res.status(401).json({ message: 'Invalid old password' });
+        }
+
+        // Update password with hashing
+        const hashedNewPassword = await bcrypt.hash(newPassword, 10);
+        user.password = hashedNewPassword;
+        await user.save();
+
+        res.json({ message: 'Password updated successfully' });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Internal Server Error' });
+    }
 });
 
 app.listen(4000, () => console.log('Connected to port'));
