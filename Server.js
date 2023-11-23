@@ -14,7 +14,7 @@ mongoose.connect(process.env.MY_MONGO_URL, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
 })
-    .then(() => console.log("Connected to DB"))
+.then(() => console.log("Connected to DB"))
     .catch(error => console.error("Database connection error:", error));
 const Customer = require('./models/Customer');
 const Design = require('./models/Design');
@@ -54,13 +54,14 @@ app.get('/dashboard', async (req, res) => {
         const dash = await Customer.find({}, 'customerName contact enquiry');
         res.json(dash);
     } catch (error) {
-        res.status(500).json({error: error.message});
+        res.status(500).json({ error: error.message });
     }
 });
-app.get('/customers', async (req, res) => {
+app.get('/customers/:enquiry', async (req, res) => {
     try {
-        const customers = await Customer.findOne();
-        res.json(customers);
+        const enquiry = req.params.enquiry;
+        const customer = await Customer.findOne({ enquiry: enquiry });
+        res.json(customer);
     } catch (error) {
         handleError(res, error);
     }
@@ -68,49 +69,88 @@ app.get('/customers', async (req, res) => {
 
 app.post('/customer/new', async (req, res) => {
     try {
-        let enquiryNo;
-        if (req.body.category === "RFQ") {
-            const temp = await Rfq.countDocuments() + 3001;
-            enquiryNo = 'RFQ - ' + temp; 
-        } else {
-            const temp = await Ecn.countDocuments() + 3001;
-            enquiryNo = 'ECN - ' + temp;
-        }
-
         const customerData = req.body;
-        customerData.enquiry = enquiryNo;
-
-        const customer = new Customer(customerData);
-        const savedCustomer = await customer.save();
-        const id = savedCustomer._id;
-
-        res.json({ enquiryNo, id });
+        let enquiryNo;
+        if (req.body.enquiry === 'NA') {
+            if (req.body.category === "RFQ") {
+                const temp = await Rfq.countDocuments() + 3001;
+                enquiryNo = 'RFQ - ' + temp;
+            } else {
+                const temp = await Ecn.countDocuments() + 3001;
+                enquiryNo = 'ECN - ' + temp;
+            }
+            customerData.enquiry = enquiryNo;
+            const customer = new Customer(customerData);
+            const savedCustomer = await customer.save();
+        }
+        else {
+            enquiryNo = req.body.enquiry;
+            const customer = await Customer.replaceOne({ enquiry: enquiryNo }, customerData);
+            // const savedCustomer = await customer.save();
+        }
+        res.json({ enquiryNo });
     } catch (error) {
         handleError(res, error);
     }
 });
-
-
-app.post('/machine/new', (req, res) => {
-    const machine = new Machine(req.body);
-    machine.save()
-        .then(result => {
-            res.json(result._id);
-        })
-        .catch(error => {
-            handleError(res, error);
-        });
+app.get('/machines/:enquiry', async (req, res) => {
+    try {
+        const enquiry = req.params.enquiry;
+        const machine = await Machine.findOne({ enquiry: enquiry });
+        res.json(machine);
+    } catch (error) {
+        handleError(res, error);
+    }
 });
+app.post('/machine/new', async (req, res) => {
+    try {
+        const machineExists = await Machine.exists({ enquiry: req.body.enquiry });
+        const machineData = req.body;
+        if (machineExists) {
+            enquiry = req.body.enquiry;
+            const machine = await Machine.replaceOne({ enquiry: enquiry }, machineData)
+        } else {
+            const machine = new Machine(req.body);
+            machine.save();
+        }
+        res.json('done');
+    } catch (error) {
+        handleError(res, error);
+    }
+});
+app.get('/qualities/:enquiry', async (req,res) => {
+    try {
+        const enquiry = req.params.enquiry;
+        const quality = await Quality.findOne({ enquiry: enquiry });
+        res.json(quality);
+    } catch (error) {
+        handleError(res, error);
+    }
+})
+app.post('/quality/new', async (req, res) => {
+    try {
+        const qualityExists = await Quality.exists({enquiry: req.body.enquiry})
+        const qualityData = req.body;
+        if(qualityExists) {
+            enquiry = req.body.enquiry;
+            const quality = await Quality.replaceOne({enquiry:enquiry}, qualityData);
+        } else {
+            const quality = new Quality(req.body);
+            quality.save();
+        }
+        res.json('done');
+    } catch (error) {
+        handleError(res, error);
+    }
 
-app.post('/quality/new', (req, res) => {
-    const quality = new Quality(req.body);
-    quality.save()
-        .then(result => {
-            res.json(result._id);
-        })
-        .catch(error => {
-            handleError(res, error);
-        });
+    // const quality = new Quality(req.body);
+    // quality.save()
+    //     .then(result => {
+    //         res.json(result._id);
+    //     })
+    //     .catch(error => {
+    //         handleError(res, error);
+    //     });
 });
 
 app.get('/registers', async (req, res) => {
@@ -143,104 +183,179 @@ app.post('/register/new', async (req, res) => {
         });
 });
 
-app.get('/rfqs', async (req, res) => {
+app.get('/rfqs/:enquiry', async (req, res) => {
     try {
-        const rfqs = await Rfq.find();
-        res.json(rfqs);
+        const enquiry = req.params.enquiry;
+        const rfq = await Rfq.findOne({ enquiry: enquiry });
+        res.json(rfq);
     } catch (error) {
         handleError(res, error);
     }
 });
 
-app.post('/rfq/new', (req, res) => {
-    const rfq = new Rfq(req.body);
-    rfq.save()
-        .then(result => {
-            res.json(result);
-        })
-        .catch(error => {
-            handleError(res, error);
-        });
+app.post('/rfq/new', async (req, res) => {
+    try {
+        const rfqExists = await Rfq.exists({ enquiry: req.body.enquiry });
+        const rfqData = req.body;
+        if (rfqExists) {
+            enquiry = req.body.enquiry;
+            const rfq = await Rfq.replaceOne({ enquiry: enquiry }, rfqData)
+        } else {
+            const rfq = new Rfq(req.body);
+            rfq.save();
+        }
+        res.json('done');
+    } catch (error) {
+        handleError(res, error);
+    }
+    // const rfq = new Rfq(req.body);
+    // rfq.save()
+    //     .then(result => {
+    //         res.json(result);
+    //     })
+    //     .catch(error => {
+    //         handleError(res, error);
+    //     });
 });
 
-app.get('/ecns', async (req, res) => {
+app.get('/ecns/:enquiry', async (req, res) => {
     try {
-        const ecns = await Ecn.find();
-        res.json(ecns);
+        const enquiry = req.params.enquiry;
+        const ecn = await Ecn.findOne({ enquiry: enquiry });
+        res.json(ecn);
     } catch (error) {
         handleError(res, error);
     }
 });
 
-app.post('/ecn/new', (req, res) => {
-    const ecn = new Ecn(req.body);
-    ecn.save()
-        .then(result => {
-            res.json(result);
-        })
-        .catch(error => {
-            handleError(res, error);
-        });
+app.post('/ecn/new', async (req, res) => {
+    try {
+        const ecnExists = await Ecn.exists({ enquiry: req.body.enquiry });
+        const ecnData = req.body;
+        if (ecnExists) {
+            enquiry = req.body.enquiry;
+            const ecn = await Ecn.replaceOne({ enquiry: enquiry }, ecnData)
+        } else {
+            const ecn = new Ecn(req.body);
+            ecn.save();
+        }
+        res.json('done');
+    } catch (error) {
+        handleError(res, error);
+    }
+    // const ecn = new Ecn(req.body);
+    // ecn.save()
+    //     .then(result => {
+    //         res.json(result);
+    //     })
+    //     .catch(error => {
+    //         handleError(res, error);
+    //     });
 });
 
-app.get('/designs', async (req, res) => {
+app.get('/designs/:enquiry', async (req, res) => {
     try {
-        const designs = await Design.find();
-        res.json(designs);
+        const enquiry = req.params.enquiry;
+        const design = await Design.findOne({ enquiry: enquiry });
+        res.json(design);
     } catch (error) {
         handleError(res, error);
     }
 });
 
-app.post('/design/new', (req, res) => {
-    const design = new Design(req.body);
-    design.save()
-        .then(result => {
-            res.json(result);
-        })
-        .catch(error => {
-            handleError(res, error);
-        });
+app.post('/design/new', async (req, res) => {
+    try {
+        const designExists = await Design.exists({ enquiry: req.body.enquiry });
+        const designData = req.body;
+        if (designExists) {
+            enquiry = req.body.enquiry;
+            const design = await Design.replaceOne({ enquiry: enquiry }, designData)
+        } else {
+            const design = new Design(req.body);
+            design.save();
+        }
+        res.json('done');
+    } catch (error) {
+        handleError(res, error);
+    }
+    // const design = new Design(req.body);
+    // design.save()
+    //     .then(result => {
+    //         res.json(result);
+    //     })
+    //     .catch(error => {
+    //         handleError(res, error);
+    //     });
 });
 
-app.get('/npds', async (req, res) => {
+app.get('/npds/:enquiry', async (req, res) => {
     try {
-        const npds = await NPD.find();
-        res.json(npds);
+        const enquiry = req.params.enquiry;
+        const npd = await NPD.findOne({ enquiry: enquiry });
+        res.json(npd);
     } catch (error) {
         handleError(res, error);
     }
 });
 
-app.post('/npd/new', (req, res) => {
-    const npd = new NPD(req.body);
-    npd.save()
-        .then(result => {
-            res.json(result);
-        })
-        .catch(error => {
-            handleError(res, error);
-        });
+app.post('/npd/new', async (req, res) => {
+    try {
+        const npdExists = await NPD.exists({ enquiry: req.body.enquiry });
+        const npdData = req.body;
+        if (npdExists) {
+            enquiry = req.body.enquiry;
+            const npd = await NPD.replaceOne({ enquiry: enquiry }, npdData)
+        } else {
+            const npd = new NPD(req.body);
+            npd.save();
+        }
+        res.json('done');
+    } catch (error) {
+        handleError(res, error);
+    }
+    // const npd = new NPD(req.body);
+    // npd.save()
+    //     .then(result => {
+    //         res.json(result);
+    //     })
+    //     .catch(error => {
+    //         handleError(res, error);
+    //     });
 });
 
-app.get('/risks', async (req, res) => {
+app.get('/risks/:enquiry', async (req, res) => {
     try {
-        const risks = await Risk.find();
-        res.json(risks);
+        const enquiry = req.params.enquiry;
+        const risk = await Risk.findOne({ enquiry: enquiry });
+        res.json(risk);
     } catch (error) {
         handleError(res, error);
     }
 });
 
-app.post('/risk/new', (req, res) => {
-    const risk = new Risk(req.body);
-    risk.save()
-        .then(result => {
-            res.json(result);
-        })
-        .catch(error => {
-            handleError(res, error);
-        });
+app.post('/risk/new', async (req, res) => {
+    try {
+        const riskExists = await Risk.exists({ enquiry: req.body.enquiry });
+        const riskData = req.body;
+        if (riskExists) {
+            enquiry = req.body.enquiry;
+            const risk = await Risk.replaceOne({ enquiry: enquiry }, riskData)
+        } else {
+            const risk = new Risk(req.body);
+            risk.save();
+        }
+        res.json('done');
+    } catch (error) {
+        handleError(res, error);
+    }
+    // const risk = new Risk(req.body);
+    // risk.save()
+    //     .then(result => {
+    //         res.json(result);
+    //     })
+    //     .catch(error => {
+    //         handleError(res, error);
+    //     });
 });
 
 app.listen(4000, () => console.log('Connected to port'));

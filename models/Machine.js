@@ -10,7 +10,7 @@ const MachineSchema = new Schema({
         type: Array,
         required: true
     },
-    cycleType: {
+    cycleTime: {
         type: Array,
         required: true
     },
