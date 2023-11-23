@@ -286,4 +286,60 @@ app.post('/updatepassword', async (req, res) => {
     }
 });
 
+app.get('/user', async (req, res) => {
+    try {
+        const data = await Register.find({});
+        res.json(data);
+    } catch (error) {
+        res.status(500).json({error: error.message});
+    }
+});
+
+app.post('/resetpassword', async (req, res) => {
+    try {
+        const requestBody = req.body;
+        console.log('Request Body:', requestBody);
+        const { email } = req.body;
+
+        // Check if the user exists
+        const user = await Register.findOne({ email });
+
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }  
+        const newPassword = "aakarfoundry";
+        const hashedNewPassword = await bcrypt.hash(newPassword, 10);
+        user.password = hashedNewPassword;
+        await user.save();
+
+        res.json({ message: 'Password updated successfully' });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Internal Server Error' });
+    }
+});
+
+
+app.post('/deleteuser', async (req, res) => {
+    const { email } = req.body;
+    try {
+      // Check if the user exists
+      const user = await Register.findOne({ email });
+  
+      if (!user) {
+        return res.status(404).json({ message: 'User not found' });
+      }
+  
+      // Delete the user
+      await Register.deleteOne({ email });
+  
+      res.json({ message: 'User deleted successfully' });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: 'Internal Server Error' });
+    }
+});
+
+
+
 app.listen(4000, () => console.log('Connected to port'));
