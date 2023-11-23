@@ -138,11 +138,11 @@ POST http://localhost:4000/register/new
 Content-Type: application/json 
 
 {
-        "name" :"Abhijeet",
-        "email" :"om",
+        "name" :"Bhavin Shah",
+        "email" :"admin125",
         "number" :"123456789",
         "department" :"Marketing",
-        "priority" :"HOD"
+        "role" :"HOD"
         
 }
 
@@ -151,6 +151,31 @@ POST http://localhost:4000/login
 Content-Type: application/json 
 
 {
-        "email" :"om",
-        "password" :"aakarfoundry"      
+        "email" :"abhijeet@aakarfoundry.com",
+        "password" :"aakarfoundry"   
+}
+###
+POST http://localhost:4000/updatepassword 
+Content-Type: application/json 
+
+{
+        "email" :"abhijeet@aakarfoundry.com",
+        "oldPassword" :"aakarfoundry" ,
+        "newPassword" :"Bhavin@12345"
+}
+
+###
+POST http://localhost:4000/resetpassword 
+Content-Type: application/json 
+
+{
+        "email" :"abhijeet@aakarfoundry.com"
+}
+
+###
+POST http://localhost:4000/deleteuser 
+Content-Type: application/json 
+
+{
+        "email" :"abhijeet@aakarfoundry.com"
 }
