@@ -6,19 +6,7 @@ const MachineSchema = new Schema({
         type: String,
         required: true
     },
-    machineType: {
-        type: Array,
-        required: true
-    },
-    cycleTime: {
-        type: Array,
-        required: true
-    },
-    fixtureCost: {
-        type: Array,
-        required: true
-    },
-    machineType: {
+    machine: {
         type: Array,
         required: true
     },

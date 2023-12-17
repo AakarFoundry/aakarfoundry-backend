@@ -80,7 +80,7 @@ app.post('/customer/new', async (req, res) => {
     try {
         const customerData = req.body;
         let enquiryNo;
-        if (req.body.enquiry === 'NA') {
+        if (req.body.enquiry === undefined) {
             if (req.body.category === "RFQ") {
                 const temp = await Rfq.countDocuments() + 3001;
                 enquiryNo = 'RFQ - ' + temp;

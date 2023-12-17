@@ -98,10 +98,6 @@ const RfqSchema = new Schema({
         type: Array,
         required: true
     },
-    treatmentSpecification: {
-        type: Array,
-        required: true
-    },
     remarks: {
         type: String,
         required: true
