@@ -34,6 +34,10 @@ const CustomerSchema = new Schema({
     enquiry: {
         type:String,
         required: true
+    },
+    status:{
+        type : String,
+        default:'Details'
     }
 })
 

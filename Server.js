@@ -19,7 +19,6 @@ mongoose.connect(process.env.MY_MONGO_URL, {
 const Customer = require('./models/Customer');
 const Design = require('./models/Design');
 const Ecn = require('./models/Ecn');
-const Login = require('./models/Login');
 const NPD = require('./models/NPD');
 const Register = require('./models/Register');
 const Rfq = require('./models/Rfq');
@@ -60,7 +59,7 @@ app.post('/login', async (req, res) => {
 
 app.get('/dashboard', async (req, res) => {
     try {
-        const dash = await Customer.find({}, 'customerName contact enquiry');
+        const dash = await Customer.find({}, 'customerName contact enquiry status');
         res.json(dash);
     } catch (error) {
         res.status(500).json({ error: error.message });
@@ -121,6 +120,8 @@ app.post('/machine/new', async (req, res) => {
         } else {
             const machine = new Machine(req.body);
             machine.save();
+            const customerEnquiry = req.body.enquiry;
+            await Customer.updateOne({ enquiry: customerEnquiry }, { $set: { status: 'Machining Recorded' } });
         }
         res.json('done');
     } catch (error) {
@@ -146,6 +147,8 @@ app.post('/quality/new', async (req, res) => {
         } else {
             const quality = new Quality(req.body);
             quality.save();
+            const customerEnquiry = req.body.enquiry;
+            await Customer.updateOne({ enquiry: customerEnquiry }, { $set: { status: 'Quality Recorded' } });
         }
         res.json('done');
     } catch (error) {
@@ -196,7 +199,6 @@ app.post('/register/new', async (req, res) => {
 
         // Save the user to the database
         const result = await register.save();
-        
         res.json(result);
     } catch (error) {
         console.error(error);
@@ -218,25 +220,25 @@ app.post('/rfq/new', async (req, res) => {
     try {
         const rfqExists = await Rfq.exists({ enquiry: req.body.enquiry });
         const rfqData = req.body;
+
         if (rfqExists) {
-            enquiry = req.body.enquiry;
-            const rfq = await Rfq.replaceOne({ enquiry: enquiry }, rfqData)
+            // Update existing RFQ
+            const enquiry = req.body.enquiry;
+            await Rfq.replaceOne({ enquiry: enquiry }, rfqData);
         } else {
+            // Create new RFQ
             const rfq = new Rfq(req.body);
-            rfq.save();
+            await rfq.save();
+
+            // Update customer status
+            const customerEnquiry = req.body.enquiry;
+            await Customer.updateOne({ enquiry: customerEnquiry }, { $set: { status: 'Rfq Recorded' } });
         }
+
         res.json('done');
     } catch (error) {
         handleError(res, error);
     }
-    // const rfq = new Rfq(req.body);
-    // rfq.save()
-    //     .then(result => {
-    //         res.json(result);
-    //     })
-    //     .catch(error => {
-    //         handleError(res, error);
-    //     });
 });
 
 app.get('/ecns/:enquiry', async (req, res) => {
@@ -259,6 +261,8 @@ app.post('/ecn/new', async (req, res) => {
         } else {
             const ecn = new Ecn(req.body);
             ecn.save();
+            const customerEnquiry = req.body.enquiry;
+            await Customer.updateOne({ enquiry: customerEnquiry }, { $set: { status: 'ECN Recorded' } });
         }
         res.json('done');
     } catch (error) {
@@ -294,6 +298,8 @@ app.post('/design/new', async (req, res) => {
         } else {
             const design = new Design(req.body);
             design.save();
+            const customerEnquiry = req.body.enquiry;
+            await Customer.updateOne({ enquiry: customerEnquiry }, { $set: { status: 'Design Recorded' } });
         }
         res.json('done');
     } catch (error) {
@@ -329,6 +335,8 @@ app.post('/npd/new', async (req, res) => {
         } else {
             const npd = new NPD(req.body);
             npd.save();
+            const customerEnquiry = req.body.enquiry;
+            await Customer.updateOne({ enquiry: customerEnquiry }, { $set: { status: 'Success' } });
         }
         res.json('done');
     } catch (error) {
@@ -358,26 +366,30 @@ app.post('/risk/new', async (req, res) => {
     try {
         const riskExists = await Risk.exists({ enquiry: req.body.enquiry });
         const riskData = req.body;
+
         if (riskExists) {
-            enquiry = req.body.enquiry;
-            const risk = await Risk.replaceOne({ enquiry: enquiry }, riskData)
+            // Update existing risk
+            const enquiry = req.body.enquiry;
+            await Risk.replaceOne({ enquiry: enquiry }, riskData);
         } else {
+            // Create new risk
             const risk = new Risk(req.body);
-            risk.save();
+            await risk.save();
+
+            // Update customer status based on risk.regret value
+            const customerEnquiry = req.body.enquiry;
+            const customerStatus = risk.regret === 'NO' ? 'Rejected' : 'Risk Recorded';
+            
+            await Customer.updateOne({ enquiry: customerEnquiry }, { $set: { status: customerStatus } });
         }
+
         res.json('done');
     } catch (error) {
         handleError(res, error);
     }
-    // const risk = new Risk(req.body);
-    // risk.save()
-    //     .then(result => {
-    //         res.json(result);
-    //     })
-    //     .catch(error => {
-    //         handleError(res, error);
-    //     });
 });
+
+
 app.post('/updatepassword', async (req, res) => {
     try {
         const { email, oldPassword, newPassword } = req.body;
