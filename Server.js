@@ -25,12 +25,12 @@ const Rfq = require('./models/Rfq');
 const Risk = require('./models/Risk');
 const Machine = require('./models/Machine');
 const Quality = require('./models/Quality');
-// Error handling middleware function
+
 function handleError(res, error) {
     console.error(error);
     res.status(500).json({ message: 'Internal Server Error', error: error.message });
 }
-// Login route
+
 app.post('/login', async (req, res) => {
     const { email, password } = req.body;
     try {
@@ -47,12 +47,12 @@ app.post('/login', async (req, res) => {
         const userDepartment = user.department;
         const userRole = user.role;
         const userName = user.name
-        // Send the response with the token
+
         res.status(200).json({ message: 'Authentication successful', token, userEmail,userDepartment,userRole,userName});
     } catch (error) {
         console.error('Authentication error:', error);
 
-        // Send a generic error response
+    
         res.status(500).json({ message: 'Authentication failed. Please try again.' });
     }
 });
@@ -178,16 +178,16 @@ app.get('/registers', async (req, res) => {
 
 
 
-const saltRounds = 10; // You can adjust the number of rounds as needed
+const saltRounds = 10; 
 
 app.post('/register/new', async (req, res) => {
     const { name, email, number, department, password, role } = req.body;
 
     try {
-        // Hash the password
+       
         const hashedPassword = await bcrypt.hash(password || 'aakarfoundry', saltRounds);
 
-        // Create a new user with the hashed password
+        
         const register = new Register({
             name,
             email,
@@ -197,7 +197,7 @@ app.post('/register/new', async (req, res) => {
             role
         });
 
-        // Save the user to the database
+        
         const result = await register.save();
         res.json(result);
     } catch (error) {
@@ -222,14 +222,14 @@ app.post('/rfq/new', async (req, res) => {
         const rfqData = req.body;
 
         if (rfqExists) {
-            // Update existing RFQ
+           
             const enquiry = req.body.enquiry;
             await Rfq.replaceOne({ enquiry: enquiry }, rfqData);
         } else {
-            // Create new RFQ
+            
             const rfq = new Rfq(req.body);
             await rfq.save();
-            // Update customer status
+            
             const customerEnquiry = req.body.enquiry;
             await Customer.updateOne({ enquiry: customerEnquiry }, { $set: { status: 'Rfq Recorded' } });
         }
@@ -367,15 +367,15 @@ app.post('/risk/new', async (req, res) => {
         const riskData = req.body;
 
         if (riskExists) {
-            // Update existing risk
+          
             const enquiry = req.body.enquiry;
             await Risk.replaceOne({ enquiry: enquiry }, riskData);
         } else {
-            // Create new risk
+          
             const risk = new Risk(req.body);
             await risk.save();
 
-            // Update customer status based on risk.regret value
+            
             const customerEnquiry = req.body.enquiry;
             const customerStatus = risk.regret === 'Yes' ? 'Rejected' : 'Risk Recorded';
             
@@ -393,14 +393,14 @@ app.post('/updatepassword', async (req, res) => {
     try {
         const { email, oldPassword, newPassword } = req.body;
 
-        // Check old password
+       
         const user = await Register.findOne({ email });
 
         if (!user || !(await bcrypt.compare(oldPassword, user.password))) {
             return res.status(401).json({ message: 'Invalid old password' });
         }
 
-        // Update password with hashing
+      
         const hashedNewPassword = await bcrypt.hash(newPassword, 10);
         user.password = hashedNewPassword;
         await user.save();
@@ -427,7 +427,7 @@ app.post('/resetpassword', async (req, res) => {
         console.log('Request Body:', requestBody);
         const { email } = req.body;
 
-        // Check if the user exists
+      
         const user = await Register.findOne({ email });
 
         if (!user) {
@@ -449,14 +449,14 @@ app.post('/resetpassword', async (req, res) => {
 app.post('/deleteuser', async (req, res) => {
     const { email } = req.body;
     try {
-      // Check if the user exists
+     
       const user = await Register.findOne({ email });
   
       if (!user) {
         return res.status(404).json({ message: 'User not found' });
       }
   
-      // Delete the user
+     
       await Register.deleteOne({ email });
   
       res.json({ message: 'User deleted successfully' });
