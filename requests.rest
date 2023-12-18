@@ -179,3 +179,68 @@ Content-Type: application/json
 {
         "email" :"abhijeet@aakarfoundry.com"
 }
+
+###
+
+Post http://localhost:4000/customerDetails 
+Content-Type: application/json 
+
+{
+        "enquiry" : "RFQ - 3001"
+}
+
+###
+Post http://localhost:4000/rfqDetails 
+Content-Type: application/json 
+
+{
+        "enquiry" : "RFQ - 3002"
+}
+
+###
+Post http://localhost:4000/ecnDetails 
+Content-Type: application/json 
+
+{
+        "enquiry" : "ECN - 3001"
+}
+
+###
+Post http://localhost:4000/designDetails 
+Content-Type: application/json 
+
+{
+        "enquiry" : "RFQ - 3002"
+}
+
+###
+Post http://localhost:4000/machineDetails 
+Content-Type: application/json 
+
+{
+        "enquiry" : "RFQ - 3001"
+}
+
+###
+Post http://localhost:4000/qualityDetails 
+Content-Type: application/json 
+
+{
+        "enquiry" : "ECN - 3003"
+}
+
+###
+Post http://localhost:4000/riskDetails 
+Content-Type: application/json 
+
+{
+        "enquiry" : "RFQ - 3001"
+}
+
+###
+Post http://localhost:4000/npdDetails 
+Content-Type: application/json 
+
+{
+        "enquiry" : "RFQ - 3002"
+}

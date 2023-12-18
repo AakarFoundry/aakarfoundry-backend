@@ -229,7 +229,6 @@ app.post('/rfq/new', async (req, res) => {
             // Create new RFQ
             const rfq = new Rfq(req.body);
             await rfq.save();
-
             // Update customer status
             const customerEnquiry = req.body.enquiry;
             await Customer.updateOne({ enquiry: customerEnquiry }, { $set: { status: 'Rfq Recorded' } });
@@ -378,7 +377,7 @@ app.post('/risk/new', async (req, res) => {
 
             // Update customer status based on risk.regret value
             const customerEnquiry = req.body.enquiry;
-            const customerStatus = risk.regret === 'NO' ? 'Rejected' : 'Risk Recorded';
+            const customerStatus = risk.regret === 'Yes' ? 'Rejected' : 'Risk Recorded';
             
             await Customer.updateOne({ enquiry: customerEnquiry }, { $set: { status: customerStatus } });
         }
@@ -467,6 +466,131 @@ app.post('/deleteuser', async (req, res) => {
     }
 });
 
+app.post('/customerDetails', async (req, res) => {
+    const { enquiry } = req.body;
+    try {
+      const details = await Customer.findOne({ enquiry });
+  
+      if (details) {
+        res.json(details);
+      } else {
+        res.status(404).json({ error: 'Enquiry not found' });
+      }
+    } catch (error) {
+      console.error('Error fetching details:', error);
+      res.status(500).json({ error: 'Internal Server Error' });
+    }
+  });
+  
+  app.post('/rfqDetails', async (req, res) => {
+    const { enquiry } = req.body;
+    try {
+      const details = await Rfq.findOne({ enquiry });
+  
+      if (details) {
+        res.json(details);
+      } else {
+        res.status(404).json({ error: 'Enquiry not found' });
+      }
+    } catch (error) {
+      console.error('Error fetching details:', error);
+      res.status(500).json({ error: 'Internal Server Error' });
+    }
+  });
 
+  app.post('/ecnDetails', async (req, res) => {
+    const { enquiry } = req.body;
+    try {
+      const details = await Ecn.findOne({ enquiry });
+  
+      if (details) {
+        res.json(details);
+      } else {
+        res.status(404).json({ error: 'Enquiry not found' });
+      }
+    } catch (error) {
+      console.error('Error fetching details:', error);
+      res.status(500).json({ error: 'Internal Server Error' });
+    }
+  });
 
+  app.post('/designDetails', async (req, res) => {
+    const { enquiry } = req.body;
+    try {
+      const details = await Design.findOne({ enquiry });
+  
+      if (details) {
+        res.json(details);
+      } else {
+        res.status(404).json({ error: 'Enquiry not found' });
+      }
+    } catch (error) {
+      console.error('Error fetching details:', error);
+      res.status(500).json({ error: 'Internal Server Error' });
+    }
+  });
+  
+  app.post('/machineDetails', async (req, res) => {
+    const { enquiry } = req.body;
+    try {
+      const details = await Machine.findOne({ enquiry });
+  
+      if (details) {
+        res.json(details);
+      } else {
+        res.status(404).json({ error: 'Enquiry not found' });
+      }
+    } catch (error) {
+      console.error('Error fetching details:', error);
+      res.status(500).json({ error: 'Internal Server Error' });
+    }
+  });
+
+  app.post('/riskDetails', async (req, res) => {
+    const { enquiry } = req.body;
+    try {
+      const details = await Risk.findOne({ enquiry });
+  
+      if (details) {
+        res.json(details);
+      } else {
+        res.status(404).json({ error: 'Enquiry not found' });
+      }
+    } catch (error) {
+      console.error('Error fetching details:', error);
+      res.status(500).json({ error: 'Internal Server Error' });
+    }
+  });
+
+  app.post('/npdDetails', async (req, res) => {
+    const { enquiry } = req.body;
+    try {
+      const details = await NPD.findOne({ enquiry });
+  
+      if (details) {
+        res.json(details);
+      } else {
+        res.status(404).json({ error: 'Enquiry not found' });
+      }
+    } catch (error) {
+      console.error('Error fetching details:', error);
+      res.status(500).json({ error: 'Internal Server Error' });
+    }
+  });
+
+  app.post('/qualityDetails', async (req, res) => {
+    const { enquiry } = req.body;
+    try {
+      const details = await Quality.findOne({ enquiry });
+  
+      if (details) {
+        res.json(details);
+      } else {
+        res.status(404).json({ error: 'Enquiry not found' });
+      }
+    } catch (error) {
+      console.error('Error fetching details:', error);
+      res.status(500).json({ error: 'Internal Server Error' });
+    }
+  });
 app.listen(4000, () => console.log('Connected to port'));
